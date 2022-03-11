@@ -1,6 +1,6 @@
-from itertools import cycle
 import json
 import sys
+from itertools import cycle
 
 import app_logger
 from error_messages import ErrorMessages
