@@ -93,4 +93,4 @@ class PhasmoSaveDataDecoder:
         return self
 
     def __repr__(self):
-        return f"{self.encrypted_file_name=} {self.decrypted_file_name} {self._get_masked_key()}"
+        return f"{self.encrypted_file_name=} {self.decrypted_file_name=} self.key={self._get_masked_key()}"
