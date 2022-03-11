@@ -1,3 +1,5 @@
 .idea/
 key.txt
-x.log
+log.log
+saveData.txt
+decrypted_saveData.txt

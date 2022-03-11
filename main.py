@@ -1,7 +1,7 @@
 import argparse
 
 import app_logger
-from PhasmoSaveDataDecoder import PhasmoSaveDataDecoder
+from phasmo_save_data_decoder import PhasmoSaveDataDecoder
 
 logger = app_logger.get_logger(__name__)
 

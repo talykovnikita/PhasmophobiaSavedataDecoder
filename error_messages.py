@@ -11,3 +11,5 @@ class ErrorMessages(Enum):
     KEY_FILE_PROBLEM = (
         "Problem with key file. Please place your key.txt in folder with this script"
     )
+
+    JSON_CORRUPTED = "Unable to parse JSON. File is corrupted"

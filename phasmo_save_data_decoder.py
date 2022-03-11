@@ -1,8 +1,9 @@
 from itertools import cycle
 import json
+import sys
 
 import app_logger
-from ErrorMessages import ErrorMessages
+from error_messages import ErrorMessages
 
 logger = app_logger.get_logger(__name__)
 
@@ -28,6 +29,7 @@ class PhasmoSaveDataDecoder:
                 return self.key
         except EnvironmentError:
             logger.debug(ErrorMessages.KEY_FILE_PROBLEM.value)
+            sys.exit(1)
 
     def _crypt(self, data):
         xored = "".join(chr(ord(x) ^ ord(y)) for (x, y) in zip(data, cycle(self.key)))
@@ -43,9 +45,10 @@ class PhasmoSaveDataDecoder:
                 encrypted_data = self._crypt(data=data)
 
                 encrypted_file.write(encrypted_data)
-                print(f"Check encrypted data in {self.encrypted_file_name}")
+                logger.debug(f"Encrypted file created: {self.encrypted_file_name}")
         except EnvironmentError:
             logger.debug(ErrorMessages.DECRYPTED_FILE_PROBLEM.value)
+            sys.exit(1)
 
         return self
 
@@ -58,9 +61,10 @@ class PhasmoSaveDataDecoder:
                 decrypted_data = self._crypt(data=data)
 
                 decrypted_file.write(decrypted_data)
-                print(f"Check decrypted data in {self.decrypted_file_name}")
+                logger.debug(f"Decrypted file created: {self.decrypted_file_name}")
         except EnvironmentError:
             logger.debug(ErrorMessages.ENCRYPTED_FILE_PROBLEM.value)
+            sys.exit(1)
 
         return self
 
@@ -73,13 +77,18 @@ class PhasmoSaveDataDecoder:
                 for i in range(len(json_data.get("IntData", []))):
                     if json_data.get("IntData", [])[i].get("Key", {}) == "PlayersMoney":
                         json_data.get("IntData", [])[i]["Value"] = str(amount)
-                        print(f"Amount of money is set to {amount}")
+                        logger.debug(f"Amount of money is set to {amount}")
 
                 f.seek(0)
                 f.truncate()
                 f.writelines(json.dumps(json_data))
         except EnvironmentError:
             logger.debug(ErrorMessages.DECRYPTED_FILE_PROBLEM.value)
+            sys.exit(1)
+
+        except json.decoder.JSONDecodeError:
+            logger.debug(ErrorMessages.JSON_CORRUPTED.value)
+            sys.exit(1)
 
         return self
 
